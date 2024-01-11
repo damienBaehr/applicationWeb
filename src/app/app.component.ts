@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { SendMessageComponent } from './send-message.component';
 
 
 // // ---------------BASE
@@ -61,32 +62,16 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule],
-  template: `
-  <div class="bg-slate-300 p-10 flex gap-4 w-full">
-    <input [(ngModel)]="message" class="p-3 rounded-md bg-slate-50" type="text"/>
-    <button (click)="send()" class=" px-5 rounded-md bg-slate-100">SEND</button>
-  </div>
-  `,
+  imports: [FormsModule, SendMessageComponent],
+  template: `<send-message (send)="send($event)"/>`,
 })
 export class AppComponent {
-  title : string = 'mini chat';
-  message = '';
+  
   messages : string[] = [] ;
-  
-  constructor() {}
-  
-  log() {
-    console.log(this.title);
-  }
 
-  editTitle(event: Event) {
-    (event.target as HTMLInputElement).value;
+  send(message : string){
+    this.messages.push(message)
+    console.log("Messages envoyés",this.messages)
   }
-
-  send() {
-    this.messages.push(this.message);
-    this.message = '';
-    console.log('Messages envoyés :',this.messages)
-  }
+    
 }
