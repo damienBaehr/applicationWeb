@@ -1,3 +1,4 @@
+import { ParseLinkPipe } from './parse-link.pipe';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
@@ -19,18 +20,17 @@ interface DadJoke {
 }
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  animations:[
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({opacity:0}),
-        animate('150ms', style({opacity: 1}))
-      ])
-    ] )
-  ],
-  imports: [FormsModule, SendMessageComponent, CommonModule],
-  template: `
+    selector: 'app-root',
+    standalone: true,
+    animations: [
+        trigger('fadeIn', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('150ms', style({ opacity: 1 }))
+            ])
+        ])
+    ],
+    template: `
   @if(logged){
     <send-message (send)="send($event)"/>
   }@else { 
@@ -41,10 +41,11 @@ interface DadJoke {
   @for (item of messages; track $index){
     <div @fadeIn class="p-4 rounded m-4" [ngClass]="item.username === 'dad' ? 'bg-slate-400 ml-16' : 'bg-slate-100' ">
       <p class="font-bold">{{ item.username }}</p>
-      <p>{{ item.content }}</p>
+      <p [innerHTML]="item.content | parseLink"></p>
     </div>
   }
   `,
+    imports: [FormsModule, SendMessageComponent, CommonModule, ParseLinkPipe]
 })
 export class AppComponent {
   
