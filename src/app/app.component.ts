@@ -4,6 +4,8 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SendMessageComponent } from './send-message.component';
 import { HttpClient } from '@angular/common/http';
+import { fromEvent } from 'rxjs';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 
 // // ---------------BASE
@@ -74,6 +76,14 @@ interface DadJoke {
 @Component({
   selector: 'app-root',
   standalone: true,
+  animations:[
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({opacity:0}),
+        animate('150ms', style({opacity: 1}))
+      ])
+    ] )
+  ],
   imports: [FormsModule, SendMessageComponent, CommonModule],
   template: `
   @if(logged){
@@ -84,7 +94,7 @@ interface DadJoke {
   }
   <button (click)='getDadJoke()'>getDadJoke</button>
   @for (item of messages; track $index){
-    <div class="p-4 rounded m-4" [ngClass]="item.username === 'dad' ? 'bg-slate-400 ml-16' : 'bg-slate-100' ">
+    <div @fadeIn class="p-4 rounded m-4" [ngClass]="item.username === 'dad' ? 'bg-slate-400 ml-16' : 'bg-slate-100' ">
       <p class="font-bold">{{ item.username }}</p>
       <p>{{ item.content }}</p>
     </div>
@@ -98,9 +108,20 @@ export class AppComponent {
   username = "";
   http = inject(HttpClient);
 
+  constructor( ) { 
+    fromEvent(window, 'storage').subscribe((event) => {
+      let messages = localStorage.getItem("messages");
+      if(messages){
+        let parsedMessages = JSON.parse(messages)
+        this.messages = parsedMessages
+      }
+    });
+  }
+
   send(message : string){
     if(this.username){
       this.messages.push({username : this.username, content : message})
+      localStorage.setItem("messages", JSON.stringify(this.messages))
     }
     console.log("Messages envoyés",this.messages)
   }
