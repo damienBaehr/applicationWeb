@@ -7,61 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { fromEvent } from 'rxjs';
 import { animate, style, transition, trigger } from '@angular/animations';
 
-
-// // ---------------BASE
-// @Component({
-//   selector: 'app-root',
-//   standalone: true,
-//   imports: [CommonModule, RouterOutlet],
-//   templateUrl: './app.component.html',
-//   styleUrl: './app.component.scss'
-// })
-// export class AppComponent {
-//   title = 'testangular';
-// }
-
-
-// // ---------------EX 1 - Bind de propriété
-// @Component({
-//   selector: 'app-root',
-//   standalone: true,
-//   template: `
-//   <h1>{{ title.toUpperCase() }}</h1>
-//   <Button>Bouton</Button>
-//   `,
-// })
-// export class AppComponent {
-//   title : string = 'testangular';
-
-
-//   constructor() {
-//   }
-// }
-
-
-// // ---------------EX 2 - Bind d'évènement
-// @Component({
-//   selector: 'app-root',
-//   standalone: true,
-//   template: `
-//   <h1>{{ title }}</h1>
-//   <Button (click)="log()">Bouton</Button>
-//   `,
-// })
-// export class AppComponent {
-//   title : string = 'testangular';
-
-
-//   constructor() {}
-
-
-//   log() {
-//     console.log('click');
-//   }
-// }
-
-
-// ---------------EX 3 - Bind d'évènement'
 interface Message {
   username : string;
   content: string;
