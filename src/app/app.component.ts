@@ -1,7 +1,6 @@
 import { ParseLinkPipe } from './parse-link.pipe';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SendMessageComponent } from './send-message.component';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +10,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 interface Message {
   username : string;
   content: string;
+  datetime : Date;
 }
 
 interface DadJoke {
@@ -37,11 +37,14 @@ interface DadJoke {
     <input class="border border-slate-600 p-2 m-2" type="text" [(ngModel)]="username">
     <button (click)="login()">Connexion</button>
   }
-  <button (click)='getDadJoke()'>getDadJoke</button>
+  <!-- <button (click)='getDadJoke()'>getDadJoke</button> -->
   @for (item of messages; track $index){
     <div @fadeIn class="p-4 rounded m-4" [ngClass]="item.username === 'dad' ? 'bg-slate-400 ml-16' : 'bg-slate-100' ">
+    <div class="flex justify-between mb-9">      
       <p class="font-bold">{{ item.username }}</p>
-      <p [innerHTML]="item.content | parseLink"></p>
+      <p class="italic">{{item.datetime | date:"dd/MM/YYYY à HH:mm:ss"}}</p>
+    </div>
+    <p [innerHTML]="item.content | parseLink"></p>
     </div>
   }
   `,
@@ -66,7 +69,11 @@ export class AppComponent {
 
   send(message : string){
     if(this.username){
-      this.messages.push({username : this.username, content : message})
+      this.messages.push({
+        username : this.username,
+        content : message,
+        datetime : new Date()
+      })
       localStorage.setItem("messages", JSON.stringify(this.messages))
     }
     console.log("Messages envoyés",this.messages)
@@ -78,11 +85,11 @@ export class AppComponent {
     }
   }
 
-  getDadJoke(){
-    this.http.get<DadJoke>("https://icanhazdadjoke.com/", {headers : {"Accept": "application/json"}}).subscribe(e => {
-      let message : Message = {username : "dad", content: e.joke}
-      this.messages.push(message)
-    })
-  }
+  // getDadJoke(){
+  //   this.http.get<DadJoke>("https://icanhazdadjoke.com/", {headers : {"Accept": "application/json"}}).subscribe(e => {
+  //     let message : Message = {username : "dad", content: e.joke}
+  //     this.messages.push(message)
+  //   })
+  // }
     
 }
