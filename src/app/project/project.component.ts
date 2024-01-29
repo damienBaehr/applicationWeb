@@ -1,4 +1,6 @@
+import { Projet } from './../interfaces/projet.interface';
 import { Component } from '@angular/core';
+import { project } from './mockup-project';
 
 @Component({
   selector: 'app-project',
@@ -8,5 +10,5 @@ import { Component } from '@angular/core';
   styleUrl: './project.component.scss'
 })
 export class ProjectComponent {
-
+  projet = project;
 }
